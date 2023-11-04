@@ -11,6 +11,11 @@ export interface SignInOptions {
   }
 }
 
+export interface SignInResult {
+  verificationFlowId: string,
+}
+
+
 export interface VerifyOptions {
   id: string,
   code: string,
@@ -28,7 +33,7 @@ export interface OryAuthPlugin {
 
   session(): Promise<unknown>
 
-  signIn(options: SignInOptions): Promise<unknown>;
+  signIn(options: SignInOptions): Promise<SignInResult>;
 
   verify(options: VerifyOptions): Promise<unknown>;
 

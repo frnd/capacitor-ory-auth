@@ -2,6 +2,7 @@ import {WebPlugin} from '@capacitor/core';
 
 import type {LogInOptions, OryAuthOptions, OryAuthPlugin, SignInOptions, VerifyOptions} from './definitions';
 import {FrontendApi, Configuration, UiNodeInputAttributes} from '@ory/kratos-client';
+import {SignInResult} from "./definitions";
 
 
 let kratos: FrontendApi;
@@ -34,7 +35,7 @@ export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
         return session
     }
 
-    async signIn({password, traits}: SignInOptions): Promise<unknown> {
+    async signIn({password, traits}: SignInOptions): Promise<SignInResult> {
 
         if (!kratos) return Promise.reject("Initialize plugin before use.")
 
@@ -50,8 +51,15 @@ export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
                     password,
                     traits,
                 }
-            })
-            return Promise.resolve(registration);
+            });
+
+            for (const cw of (registration.continue_with || [])) {
+                if(cw.action === 'show_verification_ui' && 'flow' in cw) return Promise.resolve({
+                    verificationFlowId: cw.flow.id
+                })
+            }
+
+            return Promise.reject("No verification flow Id");
         }
 
         return Promise.reject("Error")

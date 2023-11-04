@@ -1,22 +1,17 @@
 package es.frnd.capacitor.oryauth;
 
-import android.content.Context;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.plugin.CapacitorCookieManager;
 
-import java.io.IOException;
-import java.security.KeyStore;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
-import java.security.cert.CertificateException;
+import java.net.CookieHandler;
 
 import sh.ory.ApiClient;
+import sh.ory.ApiException;
 import sh.ory.Configuration;
-import sh.ory.api.FrontendApi;
 
 @CapacitorPlugin(name = "OryAuth")
 public class OryAuthPlugin extends Plugin {
@@ -52,11 +47,17 @@ public class OryAuthPlugin extends Plugin {
         if (auth == null) call.reject("Initialize plugin before use.");
 
         String password = call.getString("password");
-        // JSObject traits = call.getObject("traits");
+        JSObject traits = call.getObject("traits");
 
-        auth.signin(password);
+        try {
+            String flowId = auth.signIn(password, traits.toString());
+            JSObject res = new JSObject();
+            res.put("verificationFlowId", flowId);
+            call.resolve(res);
+        } catch (ApiException e) {
+            call.reject(e.getMessage());
+        }
 
-        call.resolve();
     }
 
     @PluginMethod()
@@ -64,8 +65,18 @@ public class OryAuthPlugin extends Plugin {
 
         if (auth == null) call.reject("Initialize plugin before use.");
 
-        System.out.println("verify");
-        call.resolve();
+        String id = call.getString("id");
+        String code = call.getString("code");
+        String email = call.getString("email");
+
+        try {
+            Object state = auth.verify(id, code, email);
+            JSObject res = new JSObject();
+            res.put("state", state);
+            call.resolve(res);
+        } catch (ApiException e) {
+            call.reject(e.getMessage());
+        }
     }
 
     @PluginMethod()
@@ -82,7 +93,12 @@ public class OryAuthPlugin extends Plugin {
 
         if (auth == null) call.reject("Initialize plugin before use.");
 
-        System.out.println("logOut");
-        call.resolve();
+        try {
+            JSObject res = new JSObject();
+            res.put("state", auth.logout());
+            call.resolve(res);
+        } catch (ApiException e) {
+            call.reject(e.getMessage());
+        }
     }
 }

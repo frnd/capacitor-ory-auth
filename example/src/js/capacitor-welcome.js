@@ -1,9 +1,18 @@
 import {SplashScreen} from '@capacitor/splash-screen';
 import {OryAuth} from '@frnd/capacitor-ory-auth';
 
+// const LOCAL = "http://localhost:8080/.ory/kratos/public"
+// const ORY_PROXY = "http://localhost:4000/.ory"
+const ORY_NETWORK = "https://unruffled-nash-i4elrqes45.projects.oryapis.com"
+const BASE_PATH = ORY_NETWORK
+
 function updateSessionInfo(element) {
-    OryAuth.session().then((session) => {
+    OryAuth.session().then(async (session) => {
         element.innerHTML = JSON.stringify(session, null, 2)
+
+        const whoami = await fetch(`${BASE_PATH}/sessions/whoami`)
+        console.log('capacitor-welcome.js: whoami = ', whoami)
+
     }).catch(() => {
         element.innerHTML = "No session"
     }).finally(SplashScreen.hide)
@@ -134,7 +143,7 @@ window.customElements.define(
             let verificationFlowId;
 
             self.shadowRoot.querySelector('#sign-in')
-                .addEventListener('click', async function (e) {
+                .addEventListener('click', async function () {
                     try {
                         const email = self.shadowRoot.querySelector('#new-email').value
                         const password = self.shadowRoot.querySelector('#new-password').value
@@ -146,19 +155,17 @@ window.customElements.define(
                         }
                         const result = await OryAuth.signIn(options)
 
-                        verificationFlowId = result.continue_with.flow
+                        verificationFlowId = result.verificationFlowId
 
-                        self.shadowRoot.querySelector('#sign-in-result').innerHTML = JSON.stringify(result, null, 2)
-
-                        console.log('Sign in result', result)
+                        updateSessionInfo(self.shadowRoot.querySelector('#session-info'))
 
                     } catch (e) {
-                        console.warn('User cancelled', e);
+                        console.warn('Error signing in', e);
                     }
                 });
 
             self.shadowRoot.querySelector('#validate')
-                .addEventListener('click', async function (e) {
+                .addEventListener('click', async function () {
                     try {
                         const code = self.shadowRoot.querySelector('#code').value
 
@@ -174,7 +181,7 @@ window.customElements.define(
                 });
 
             self.shadowRoot.querySelector('#log-in')
-                .addEventListener('click', async function (e) {
+                .addEventListener('click', async function () {
                     try {
 
                         const identifier = self.shadowRoot.querySelector('#identifier').value
@@ -190,7 +197,7 @@ window.customElements.define(
                 });
 
             self.shadowRoot.querySelector('#log-out')
-                .addEventListener('click', async function (e) {
+                .addEventListener('click', async function () {
                     try {
 
                         const result = await OryAuth.logOut()
@@ -202,10 +209,7 @@ window.customElements.define(
                     }
                 });
 
-            const LOCAL = "http://localhost:8080/.ory/kratos/public"
-            const ORY_PROXY = "http://localhost:4000/.ory"
-            const ORY_NETWORK = "https://unruffled-nash-i4elrqes45.projects.oryapis.com"
-            OryAuth.initialize({basePath: ORY_PROXY, timeout: 10000})
+            OryAuth.initialize({basePath: BASE_PATH, timeout: 10000})
 
             updateSessionInfo(self.shadowRoot.querySelector('#session-info'))
         }

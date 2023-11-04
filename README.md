@@ -120,10 +120,10 @@ logOut() => Promise<unknown>
 
 #### SignInOptions
 
-| Prop           | Type                |
-| -------------- | ------------------- |
-| **`password`** | <code>string</code> |
-| **`traits`**   | <code>object</code> |
+| Prop           | Type                            |
+| -------------- | ------------------------------- |
+| **`password`** | <code>string</code>             |
+| **`traits`**   | <code>{ email: string; }</code> |
 
 
 #### VerifyOptions
