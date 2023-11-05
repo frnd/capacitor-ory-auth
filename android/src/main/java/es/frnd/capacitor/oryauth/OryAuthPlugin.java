@@ -84,6 +84,16 @@ public class OryAuthPlugin extends Plugin {
 
         if (auth == null) call.reject("Initialize plugin before use.");
 
+        String identifier = call.getString("identifier");
+        String password = call.getString("password");
+
+        try {
+            auth.login(identifier, password);
+            call.resolve();
+        } catch (ApiException e) {
+            call.reject(e.getMessage());
+        }
+
         System.out.println("logIn");
         call.resolve();
     }

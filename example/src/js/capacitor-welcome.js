@@ -187,12 +187,12 @@ window.customElements.define(
                         const identifier = self.shadowRoot.querySelector('#identifier').value
                         const password = self.shadowRoot.querySelector('#password').value
 
-                        const result = await OryAuth.logIn({identifier: identifier, password:password})
+                        await OryAuth.logIn({identifier: identifier, password:password})
 
-                        self.shadowRoot.querySelector('#session-info').innerHTML = JSON.stringify(result.session, null, 2)
+                        updateSessionInfo(self.shadowRoot.querySelector('#session-info'))
 
                     } catch (e) {
-                        console.warn('User cancelled', e);
+                        console.warn('Login error', e);
                     }
                 });
 

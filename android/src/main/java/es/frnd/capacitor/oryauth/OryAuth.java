@@ -16,10 +16,15 @@ import sh.ory.ApiException;
 import sh.ory.api.FrontendApi;
 import sh.ory.model.ContinueWith;
 import sh.ory.model.ContinueWithVerificationUi;
+import sh.ory.model.LoginFlow;
 import sh.ory.model.PerformNativeLogoutBody;
 import sh.ory.model.RegistrationFlow;
 import sh.ory.model.Session;
+import sh.ory.model.SuccessfulNativeLogin;
 import sh.ory.model.SuccessfulNativeRegistration;
+import sh.ory.model.UpdateLoginFlowBody;
+import sh.ory.model.UpdateLoginFlowWithCodeMethod;
+import sh.ory.model.UpdateLoginFlowWithPasswordMethod;
 import sh.ory.model.UpdateRegistrationFlowBody;
 import sh.ory.model.UpdateRegistrationFlowWithPasswordMethod;
 import sh.ory.model.UpdateVerificationFlowBody;
@@ -128,5 +133,23 @@ public class OryAuth {
         editor.commit();
 
         return true;
+    }
+
+    public void login(String identifier, String password) throws ApiException {
+
+        LoginFlow flow = frontendApi.createNativeLoginFlow(null, null, null, true, null);
+
+        UpdateLoginFlowWithPasswordMethod psswd = new UpdateLoginFlowWithPasswordMethod();
+        psswd.setPassword(password);
+        psswd.setIdentifier(identifier);
+        psswd.setMethod("password");
+        UpdateLoginFlowBody body = new UpdateLoginFlowBody(psswd);
+        SuccessfulNativeLogin login = frontendApi.updateLoginFlow(flow.getId(), body, null, null);
+
+        String xSessionToken = login.getSessionToken();
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.remove(X_SESSION_TOKEN);
+        editor.putString(X_SESSION_TOKEN, xSessionToken);
+        editor.commit();
     }
 }
