@@ -1,13 +1,12 @@
 package es.frnd.capacitor.oryauth;
 
+import android.webkit.JavascriptInterface;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.getcapacitor.plugin.CapacitorCookieManager;
-
-import java.net.CookieHandler;
 
 import sh.ory.ApiClient;
 import sh.ory.ApiException;
@@ -16,18 +15,28 @@ import sh.ory.Configuration;
 @CapacitorPlugin(name = "OryAuth")
 public class OryAuthPlugin extends Plugin {
 
-    public static final String KEYSTORE_PROVIDER_ANDROID_KEYSTORE = "AndroidKeyStore";
-    public static final String SIGNATURE_SHA256withRSA = "SHA256withRSA";
-    public static final String KEYSTORE_KEY_NAME = "xSessionToken";
-
     private OryAuth auth;
+
+    private SessionTokenStore sessionTokenStore;
+
+    @Override
+    public void load() {
+        sessionTokenStore = new SessionTokenStore(getContext());
+        this.bridge.getWebView().addJavascriptInterface(this, "CapacitorOryAuthAndroidInterface");
+        super.load();
+    }
+
+    @JavascriptInterface
+    public String sessionToken() {
+        return sessionTokenStore.get();
+    }
 
     @PluginMethod()
     public void initialize(PluginCall call) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         String basePath = call.getString("basePath");
         defaultClient.setBasePath(basePath);
-        auth = new OryAuth(getContext(), defaultClient);
+        auth = new OryAuth(sessionTokenStore, defaultClient);
         call.resolve();
     }
 

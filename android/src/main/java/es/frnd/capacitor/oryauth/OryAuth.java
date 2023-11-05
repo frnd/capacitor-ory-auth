@@ -1,11 +1,5 @@
 package es.frnd.capacitor.oryauth;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
-import androidx.core.os.BuildCompat;
-
 import com.getcapacitor.plugin.CapacitorCookieManager;
 
 import java.net.CookieHandler;
@@ -34,49 +28,22 @@ import sh.ory.model.VerificationFlow;
 public class OryAuth {
 
     private static final String TAG = OryAuth.class.getSimpleName();
-    private static final String X_SESSION_TOKEN_PREFERENCES_NAME = "ory_session_token_preferences";
-    private static final String X_SESSION_TOKEN = "ory_session_token";
-    private static final String X_SESSION_TOKEN_COOKIE_NAME = "X-Session-Token-TEST";
-    private SharedPreferences mSharedPreferences;
 
-    private FrontendApi frontendApi;
+    private final SessionTokenStore sessionTokenStore;
+    private final FrontendApi frontendApi;
 
-    public OryAuth(Context context, ApiClient defaultClient) {
-        Context storageContext;
-        if (BuildCompat.isAtLeastN()) {
-            // All N devices have split storage areas, but we may need to
-            // move the existing preferences to the new device protected
-            // storage area, which is where the data lives from now on.
-            final Context deviceContext = context.createDeviceProtectedStorageContext();
-            if (!deviceContext.moveSharedPreferencesFrom(context,
-                    X_SESSION_TOKEN_PREFERENCES_NAME)) {
-                Log.w(TAG, "Failed to migrate shared preferences.");
-            }
-            storageContext = deviceContext;
-        } else {
-            storageContext = context;
-        }
-        mSharedPreferences = storageContext
-                .getSharedPreferences(X_SESSION_TOKEN_PREFERENCES_NAME, Context.MODE_PRIVATE);
-
+    public OryAuth(SessionTokenStore sessionTokenStore, ApiClient defaultClient) {
+        this.sessionTokenStore = sessionTokenStore;
         frontendApi = new FrontendApi(defaultClient);
     }
 
     public boolean session() {
-        String xSessionToken = mSharedPreferences.getString(X_SESSION_TOKEN, null);
+        String xSessionToken = sessionTokenStore.get();
         if (xSessionToken == null) return false;
         try {
             Session session = frontendApi.toSession(xSessionToken, (String) null, (String) null);
 
-            boolean active = Boolean.TRUE.equals(session.getActive());
-            if (active) {
-                ((CapacitorCookieManager)CookieHandler.getDefault()).setCookie(
-                        frontendApi.getApiClient().getBasePath(),
-                        X_SESSION_TOKEN_COOKIE_NAME,
-                        xSessionToken
-                );
-            }
-            return active;
+            return Boolean.TRUE.equals(session.getActive());
         } catch (Exception e) {
             return false;
         }
@@ -93,10 +60,7 @@ public class OryAuth {
 
         SuccessfulNativeRegistration registration = frontendApi.updateRegistrationFlow(flow.getId(), body, null);
         String xSessionToken = registration.getSessionToken();
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(X_SESSION_TOKEN);
-        editor.putString(X_SESSION_TOKEN, xSessionToken);
-        editor.commit();
+        sessionTokenStore.store(xSessionToken);
 
         ContinueWithVerificationUi continueWithVerificationUi;
         List<ContinueWith> continueWith = registration.getContinueWith();
@@ -122,15 +86,13 @@ public class OryAuth {
     }
 
     public boolean logout() throws ApiException {
-        String xSessionToken = mSharedPreferences.getString(X_SESSION_TOKEN, null);
+        String xSessionToken = sessionTokenStore.get();
         if (xSessionToken == null) return false;
 
         PerformNativeLogoutBody performNativeLogoutBody = new PerformNativeLogoutBody();
         performNativeLogoutBody.setSessionToken(xSessionToken);
         frontendApi.performNativeLogout(performNativeLogoutBody);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(X_SESSION_TOKEN);
-        editor.commit();
+        sessionTokenStore.clear();
 
         return true;
     }
@@ -147,9 +109,6 @@ public class OryAuth {
         SuccessfulNativeLogin login = frontendApi.updateLoginFlow(flow.getId(), body, null, null);
 
         String xSessionToken = login.getSessionToken();
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.remove(X_SESSION_TOKEN);
-        editor.putString(X_SESSION_TOKEN, xSessionToken);
-        editor.commit();
+        sessionTokenStore.store(xSessionToken);
     }
 }

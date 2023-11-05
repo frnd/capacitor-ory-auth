@@ -53,14 +53,14 @@ session() => Promise<unknown>
 ### signIn(...)
 
 ```typescript
-signIn(options: SignInOptions) => Promise<unknown>
+signIn(options: SignInOptions) => Promise<SignInResult>
 ```
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#signinoptions">SignInOptions</a></code> |
 
-**Returns:** <code>Promise&lt;unknown&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#signinresult">SignInResult</a>&gt;</code>
 
 --------------------
 
@@ -116,6 +116,13 @@ logOut() => Promise<unknown>
 | **`basePath`**        | <code>string</code>  |
 | **`withCredentials`** | <code>boolean</code> |
 | **`timeout`**         | <code>number</code>  |
+
+
+#### SignInResult
+
+| Prop                     | Type                |
+| ------------------------ | ------------------- |
+| **`verificationFlowId`** | <code>string</code> |
 
 
 #### SignInOptions
