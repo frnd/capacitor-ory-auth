@@ -1,8 +1,5 @@
 package es.frnd.capacitor.oryauth;
 
-import com.getcapacitor.plugin.CapacitorCookieManager;
-
-import java.net.CookieHandler;
 import java.util.List;
 
 import sh.ory.ApiClient;
@@ -17,7 +14,6 @@ import sh.ory.model.Session;
 import sh.ory.model.SuccessfulNativeLogin;
 import sh.ory.model.SuccessfulNativeRegistration;
 import sh.ory.model.UpdateLoginFlowBody;
-import sh.ory.model.UpdateLoginFlowWithCodeMethod;
 import sh.ory.model.UpdateLoginFlowWithPasswordMethod;
 import sh.ory.model.UpdateRegistrationFlowBody;
 import sh.ory.model.UpdateRegistrationFlowWithPasswordMethod;
@@ -76,9 +72,12 @@ public class OryAuth {
 
     public Object verify(String id, String code, String email) throws ApiException {
 
-        VerificationFlow flow = frontendApi.createNativeVerificationFlow();
+        VerificationFlow flow = frontendApi.getVerificationFlow(id, null);
 
-        UpdateVerificationFlowWithCodeMethod codeBody = new UpdateVerificationFlowWithCodeMethod().code(code).email(email);
+        UpdateVerificationFlowWithCodeMethod codeBody = new UpdateVerificationFlowWithCodeMethod()
+                .method(UpdateVerificationFlowWithCodeMethod.MethodEnum.CODE)
+                .code(code)
+                .email(email);
         UpdateVerificationFlowBody body = new UpdateVerificationFlowBody(codeBody);
         VerificationFlow verification = frontendApi.updateVerificationFlow(flow.getId(), body, null, null);
 
