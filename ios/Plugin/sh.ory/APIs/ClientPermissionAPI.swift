@@ -42,7 +42,7 @@ open class ClientPermissionAPI {
      Check a permission
      - GET /relation-tuples/check/openapi
      - To learn how relationship tuples and the check works, head over to [the documentation](https://www.ory.sh/docs/keto/concepts/api-overview).
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter namespace: (query) Namespace of the Relationship (optional)
@@ -113,7 +113,7 @@ open class ClientPermissionAPI {
      Check a permission
      - GET /relation-tuples/check
      - To learn how relationship tuples and the check works, head over to [the documentation](https://www.ory.sh/docs/keto/concepts/api-overview).
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter namespace: (query) Namespace of the Relationship (optional)
@@ -180,7 +180,7 @@ open class ClientPermissionAPI {
      Expand a Relationship into permissions.
      - GET /relation-tuples/expand
      - Use this endpoint to expand a relationship tuple into permissions.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter namespace: (query) Namespace of the Subject Set 
@@ -237,7 +237,7 @@ open class ClientPermissionAPI {
      Check a permission
      - POST /relation-tuples/check/openapi
      - To learn how relationship tuples and the check works, head over to [the documentation](https://www.ory.sh/docs/keto/concepts/api-overview).
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter maxDepth: (query)  (optional)
@@ -289,7 +289,7 @@ open class ClientPermissionAPI {
      Check a permission
      - POST /relation-tuples/check
      - To learn how relationship tuples and the check works, head over to [the documentation](https://www.ory.sh/docs/keto/concepts/api-overview).
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter maxDepth: (query) nolint:deadcode,unused (optional)

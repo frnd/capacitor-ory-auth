@@ -36,7 +36,7 @@ open class ClientOAuth2API {
      Accept OAuth 2.0 Consent Request
      - PUT /admin/oauth2/auth/requests/consent/accept
      - When an authorization code, hybrid, or implicit OAuth 2.0 Flow is initiated, Ory asks the login provider to authenticate the subject and then tell Ory now about it. If the subject authenticated, he/she must now be asked if the OAuth 2.0 Client which initiated the flow should be allowed to access the resources on the subject's behalf.  The consent challenge is appended to the consent provider's URL to which the subject's user-agent (browser) is redirected to. The consent provider uses that challenge to fetch information on the OAuth2 request and then tells Ory if the subject accepted or rejected the request.  This endpoint tells Ory that the subject has authorized the OAuth 2.0 client to access resources on his/her behalf. The consent provider includes additional information, such as session data for access and ID tokens, and if the consent request should be used as basis for future requests.  The response contains a redirect URL which the consent provider should redirect the user-agent to.  The default consent provider is available via the Ory Managed Account Experience. To customize the consent provider, please head over to the OAuth 2.0 documentation.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter consentChallenge: (query) OAuth 2.0 Consent Request Challenge 
@@ -88,7 +88,7 @@ open class ClientOAuth2API {
      Accept OAuth 2.0 Login Request
      - PUT /admin/oauth2/auth/requests/login/accept
      - When an authorization code, hybrid, or implicit OAuth 2.0 Flow is initiated, Ory asks the login provider to authenticate the subject and then tell the Ory OAuth2 Service about it.  The authentication challenge is appended to the login provider URL to which the subject's user-agent (browser) is redirected to. The login provider uses that challenge to fetch information on the OAuth2 request and then accept or reject the requested authentication process.  This endpoint tells Ory that the subject has successfully authenticated and includes additional information such as the subject's ID and if Ory should remember the subject's subject agent for future authentication attempts by setting a cookie.  The response contains a redirect URL which the login provider should redirect the user-agent to.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter loginChallenge: (query) OAuth 2.0 Login Request Challenge 
@@ -139,7 +139,7 @@ open class ClientOAuth2API {
      Accept OAuth 2.0 Session Logout Request
      - PUT /admin/oauth2/auth/requests/logout/accept
      - When a user or an application requests Ory OAuth 2.0 to remove the session state of a subject, this endpoint is used to confirm that logout request.  The response contains a redirect URL which the consent provider should redirect the user-agent to.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter logoutChallenge: (query) OAuth 2.0 Logout Request Challenge 
@@ -189,7 +189,7 @@ open class ClientOAuth2API {
      Create OAuth 2.0 Client
      - POST /admin/clients
      - Create a new OAuth 2.0 client. If you pass `client_secret` the secret is used, otherwise a random secret is generated. The secret is echoed in the response. It is not possible to retrieve it later on.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter oAuth2Client: (body) OAuth 2.0 Client Request Body 
@@ -236,7 +236,7 @@ open class ClientOAuth2API {
      Delete OAuth 2.0 Client
      - DELETE /admin/clients/{id}
      - Delete an existing OAuth 2.0 Client by its ID.  OAuth 2.0 clients are used to perform OAuth 2.0 and OpenID Connect flows. Usually, OAuth 2.0 clients are generated for applications which want to consume your OAuth 2.0 or OpenID Connect capabilities.  Make sure that this endpoint is well protected and only callable by first-party components.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) The id of the OAuth 2.0 Client. 
@@ -286,7 +286,7 @@ open class ClientOAuth2API {
      Delete OAuth 2.0 Access Tokens from specific OAuth 2.0 Client
      - DELETE /admin/oauth2/tokens
      - This endpoint deletes OAuth2 access tokens issued to an OAuth 2.0 Client from the database.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter clientId: (query) OAuth 2.0 Client ID 
@@ -336,7 +336,7 @@ open class ClientOAuth2API {
      Delete Trusted OAuth2 JWT Bearer Grant Type Issuer
      - DELETE /admin/trust/grants/jwt-bearer/issuers/{id}
      - Use this endpoint to delete trusted JWT Bearer Grant Type Issuer. The ID is the one returned when you created the trust relationship.  Once deleted, the associated issuer will no longer be able to perform the JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grant.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) The id of the desired grant 
@@ -386,7 +386,7 @@ open class ClientOAuth2API {
      Get an OAuth 2.0 Client
      - GET /admin/clients/{id}
      - Get an OAuth 2.0 client by its ID. This endpoint never returns the client secret.  OAuth 2.0 clients are used to perform OAuth 2.0 and OpenID Connect flows. Usually, OAuth 2.0 clients are generated for applications which want to consume your OAuth 2.0 or OpenID Connect capabilities.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) The id of the OAuth 2.0 Client. 
@@ -436,7 +436,7 @@ open class ClientOAuth2API {
      Get OAuth 2.0 Consent Request
      - GET /admin/oauth2/auth/requests/consent
      - When an authorization code, hybrid, or implicit OAuth 2.0 Flow is initiated, Ory asks the login provider to authenticate the subject and then tell Ory now about it. If the subject authenticated, he/she must now be asked if the OAuth 2.0 Client which initiated the flow should be allowed to access the resources on the subject's behalf.  The consent challenge is appended to the consent provider's URL to which the subject's user-agent (browser) is redirected to. The consent provider uses that challenge to fetch information on the OAuth2 request and then tells Ory if the subject accepted or rejected the request.  The default consent provider is available via the Ory Managed Account Experience. To customize the consent provider, please head over to the OAuth 2.0 documentation.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter consentChallenge: (query) OAuth 2.0 Consent Request Challenge 
@@ -486,7 +486,7 @@ open class ClientOAuth2API {
      Get OAuth 2.0 Login Request
      - GET /admin/oauth2/auth/requests/login
      - When an authorization code, hybrid, or implicit OAuth 2.0 Flow is initiated, Ory asks the login provider to authenticate the subject and then tell the Ory OAuth2 Service about it.  Per default, the login provider is Ory itself. You may use a different login provider which needs to be a web-app you write and host, and it must be able to authenticate (\"show the subject a login screen\") a subject (in OAuth2 the proper name for subject is \"resource owner\").  The authentication challenge is appended to the login provider URL to which the subject's user-agent (browser) is redirected to. The login provider uses that challenge to fetch information on the OAuth2 request and then accept or reject the requested authentication process.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter loginChallenge: (query) OAuth 2.0 Login Request Challenge 
@@ -536,7 +536,7 @@ open class ClientOAuth2API {
      Get OAuth 2.0 Session Logout Request
      - GET /admin/oauth2/auth/requests/logout
      - Use this endpoint to fetch an Ory OAuth 2.0 logout request.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter logoutChallenge: (query)  
@@ -586,7 +586,7 @@ open class ClientOAuth2API {
      Get Trusted OAuth2 JWT Bearer Grant Type Issuer
      - GET /admin/trust/grants/jwt-bearer/issuers/{id}
      - Use this endpoint to get a trusted JWT Bearer Grant Type Issuer. The ID is the one returned when you created the trust relationship.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) The id of the desired grant 
@@ -637,7 +637,7 @@ open class ClientOAuth2API {
      Introspect OAuth2 Access and Refresh Tokens
      - POST /admin/oauth2/introspect
      - The introspection endpoint allows to check if a token (both refresh and access) is active or not. An active token is neither expired nor revoked. If a token is active, additional information on the token will be included. You can set additional data for a token by setting `session.access_token` during the consent flow.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter token: (form) The string value of the token. For access tokens, this is the \\\&quot;access_token\\\&quot; value returned from the token endpoint defined in OAuth 2.0. For refresh tokens, this is the \\\&quot;refresh_token\\\&quot; value returned. 
@@ -694,7 +694,7 @@ open class ClientOAuth2API {
      List OAuth 2.0 Clients
      - GET /admin/clients
      - This endpoint lists all clients in the database, and never returns client secrets. As a default it lists the first 100 clients.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter pageSize: (query) Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination). (optional, default to 250)
@@ -753,7 +753,7 @@ open class ClientOAuth2API {
      List OAuth 2.0 Consent Sessions of a Subject
      - GET /admin/oauth2/auth/sessions/consent
      - This endpoint lists all subject's granted consent sessions, including client and granted scope. If the subject is unknown or has not granted any consent sessions yet, the endpoint returns an empty JSON array with status code 200 OK.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter subject: (query) The subject to list the consent sessions for. 
@@ -811,7 +811,7 @@ open class ClientOAuth2API {
      List Trusted OAuth2 JWT Bearer Grant Type Issuers
      - GET /admin/trust/grants/jwt-bearer/issuers
      - Use this endpoint to list all trusted JWT Bearer Grant Type Issuers.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter maxItems: (query)  (optional)
@@ -975,7 +975,7 @@ open class ClientOAuth2API {
      Patch OAuth 2.0 Client
      - PATCH /admin/clients/{id}
      - Patch an existing OAuth 2.0 Client using JSON Patch. If you pass `client_secret` the secret will be updated and returned via the API. This is the only time you will be able to retrieve the client secret, so write it down and keep it safe.  OAuth 2.0 clients are used to perform OAuth 2.0 and OpenID Connect flows. Usually, OAuth 2.0 clients are generated for applications which want to consume your OAuth 2.0 or OpenID Connect capabilities.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) The id of the OAuth 2.0 Client. 
@@ -1027,7 +1027,7 @@ open class ClientOAuth2API {
      Reject OAuth 2.0 Consent Request
      - PUT /admin/oauth2/auth/requests/consent/reject
      - When an authorization code, hybrid, or implicit OAuth 2.0 Flow is initiated, Ory asks the login provider to authenticate the subject and then tell Ory now about it. If the subject authenticated, he/she must now be asked if the OAuth 2.0 Client which initiated the flow should be allowed to access the resources on the subject's behalf.  The consent challenge is appended to the consent provider's URL to which the subject's user-agent (browser) is redirected to. The consent provider uses that challenge to fetch information on the OAuth2 request and then tells Ory if the subject accepted or rejected the request.  This endpoint tells Ory that the subject has not authorized the OAuth 2.0 client to access resources on his/her behalf. The consent provider must include a reason why the consent was not granted.  The response contains a redirect URL which the consent provider should redirect the user-agent to.  The default consent provider is available via the Ory Managed Account Experience. To customize the consent provider, please head over to the OAuth 2.0 documentation.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter consentChallenge: (query) OAuth 2.0 Consent Request Challenge 
@@ -1079,7 +1079,7 @@ open class ClientOAuth2API {
      Reject OAuth 2.0 Login Request
      - PUT /admin/oauth2/auth/requests/login/reject
      - When an authorization code, hybrid, or implicit OAuth 2.0 Flow is initiated, Ory asks the login provider to authenticate the subject and then tell the Ory OAuth2 Service about it.  The authentication challenge is appended to the login provider URL to which the subject's user-agent (browser) is redirected to. The login provider uses that challenge to fetch information on the OAuth2 request and then accept or reject the requested authentication process.  This endpoint tells Ory that the subject has not authenticated and includes a reason why the authentication was denied.  The response contains a redirect URL which the login provider should redirect the user-agent to.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter loginChallenge: (query) OAuth 2.0 Login Request Challenge 
@@ -1130,7 +1130,7 @@ open class ClientOAuth2API {
      Reject OAuth 2.0 Session Logout Request
      - PUT /admin/oauth2/auth/requests/logout/reject
      - When a user or an application requests Ory OAuth 2.0 to remove the session state of a subject, this endpoint is used to deny that logout request. No HTTP request body is required.  The response is empty as the logout provider has to chose what action to perform next.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter logoutChallenge: (query)  
@@ -1182,7 +1182,7 @@ open class ClientOAuth2API {
      Revoke OAuth 2.0 Consent Sessions of a Subject
      - DELETE /admin/oauth2/auth/sessions/consent
      - This endpoint revokes a subject's granted consent sessions and invalidates all associated OAuth 2.0 Access Tokens. You may also only revoke sessions for a specific OAuth 2.0 Client ID.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter subject: (query) OAuth 2.0 Consent Subject  The subject whose consent sessions should be deleted. 
@@ -1237,7 +1237,7 @@ open class ClientOAuth2API {
      Revokes OAuth 2.0 Login Sessions by either a Subject or a SessionID
      - DELETE /admin/oauth2/auth/sessions/login
      - This endpoint invalidates authentication sessions. After revoking the authentication session(s), the subject has to re-authenticate at the Ory OAuth2 Provider. This endpoint does not invalidate any tokens.  If you send the subject in a query param, all authentication sessions that belong to that subject are revoked. No OpennID Connect Front- or Back-channel logout is performed in this case.  Alternatively, you can send a SessionID via `sid` query param, in which case, only the session that is connected to that SessionID is revoked. OpenID Connect Back-channel logout is performed in this case.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter subject: (query) OAuth 2.0 Subject  The subject to revoke authentication sessions for. (optional)
@@ -1351,7 +1351,7 @@ open class ClientOAuth2API {
      Set OAuth 2.0 Client
      - PUT /admin/clients/{id}
      - Replaces an existing OAuth 2.0 Client with the payload you send. If you pass `client_secret` the secret is used, otherwise the existing secret is used.  If set, the secret is echoed in the response. It is not possible to retrieve it later on.  OAuth 2.0 Clients are used to perform OAuth 2.0 and OpenID Connect flows. Usually, OAuth 2.0 clients are generated for applications which want to consume your OAuth 2.0 or OpenID Connect capabilities.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) OAuth 2.0 Client ID 
@@ -1403,7 +1403,7 @@ open class ClientOAuth2API {
      Set OAuth2 Client Token Lifespans
      - PUT /admin/clients/{id}/lifespans
      - Set lifespans of different token types issued for this OAuth 2.0 client. Does not modify other fields.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) OAuth 2.0 Client ID 
@@ -1454,7 +1454,7 @@ open class ClientOAuth2API {
      Trust OAuth2 JWT Bearer Grant Type Issuer
      - POST /admin/trust/grants/jwt-bearer/issuers
      - Use this endpoint to establish a trust relationship for a JWT issuer to perform JSON Web Token (JWT) Profile for OAuth 2.0 Client Authentication and Authorization Grants [RFC7523](https://datatracker.ietf.org/doc/html/rfc7523).
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter trustOAuth2JwtGrantIssuer: (body)  (optional)

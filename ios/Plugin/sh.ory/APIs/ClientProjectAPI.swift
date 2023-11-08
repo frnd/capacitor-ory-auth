@@ -34,7 +34,7 @@ open class ClientProjectAPI {
     /**
      - POST /projects/{project_id}/organizations
      - Create a B2B SSO Organization
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -85,7 +85,7 @@ open class ClientProjectAPI {
      Create a Project
      - POST /projects
      - Creates a new project.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter createProjectBody: (body)  (optional)
@@ -133,7 +133,7 @@ open class ClientProjectAPI {
      Create project API token
      - POST /projects/{project}/tokens
      - Create an API token for a project.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter project: (path) The Project ID or Project slug 
@@ -184,7 +184,7 @@ open class ClientProjectAPI {
     /**
      Delete a B2B SSO Organization for a project.
      - DELETE /projects/{project_id}/organizations/{organization_id}
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -239,7 +239,7 @@ open class ClientProjectAPI {
      Delete project API token
      - DELETE /projects/{project}/tokens/{token_id}
      - Deletes an API token and immediately removes it.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter project: (path) The Project ID or Project slug 
@@ -292,7 +292,7 @@ open class ClientProjectAPI {
      Returns the Ory Network Project selected in the Ory Network Console
      - GET /console/active/project
      - Use this API to get your active project in the Ory Network Console UI.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - returns: RequestBuilder<ActiveProjectInConsole> 
@@ -338,7 +338,7 @@ open class ClientProjectAPI {
     /**
      Returns a B2B SSO Organization for a project by it's ID.
      - GET /projects/{project_id}/organizations/{organization_id}
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -392,7 +392,7 @@ open class ClientProjectAPI {
      Get a Project
      - GET /projects/{project_id}
      - Get a projects you have access to by its ID.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -442,7 +442,7 @@ open class ClientProjectAPI {
      Get all members associated with this project
      - GET /projects/{project}/members
      - This endpoint requires the user to be a member of the project with the role `OWNER` or `DEVELOPER`.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter project: (path)  
@@ -494,7 +494,7 @@ open class ClientProjectAPI {
     /**
      - GET /projects/{project_id}/metrics
      - Retrieves project metrics for the specified event type and time range
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID 
@@ -551,7 +551,7 @@ open class ClientProjectAPI {
 
     /**
      - GET /projects/{project_id}/organizations
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -601,7 +601,7 @@ open class ClientProjectAPI {
      List a project's API Tokens
      - GET /projects/{project}/tokens
      - A list of all the project's API tokens.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter project: (path) The Project ID or Project slug 
@@ -650,7 +650,7 @@ open class ClientProjectAPI {
      List All Projects
      - GET /projects
      - Lists all projects you have access to.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - returns: RequestBuilder<[ProjectMetadata]> 
@@ -697,7 +697,7 @@ open class ClientProjectAPI {
      Patch an Ory Network Project Configuration
      - PATCH /projects/{project_id}
      - Deprecated: Use the `patchProjectWithRevision` endpoint instead to specify the exact revision the patch was generated for.  This endpoints allows you to patch individual Ory Network project configuration keys for Ory's services (identity, permission, ...). The configuration format is fully compatible with the open source projects for the respective services (e.g. Ory Kratos for Identity, Ory Keto for Permissions).  This endpoint expects the `version` key to be set in the payload. If it is unset, it will try to import the config as if it is from the most recent version.  If you have an older version of a configuration, you should set the version key in the payload!  While this endpoint is able to process all configuration items related to features (e.g. password reset), it does not support operational configuration items (e.g. port, tracing, logging) otherwise available in the open source.  For configuration items that can not be translated to the Ory Network, this endpoint will return a list of warnings to help you understand which parts of your config could not be processed.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -748,7 +748,7 @@ open class ClientProjectAPI {
      Irrecoverably purge a project
      - DELETE /projects/{project_id}
      - !! Use with extreme caution !!  Using this API endpoint you can purge (completely delete) a project and its data. This action can not be undone and will delete ALL your data.  !! Use with extreme caution !!
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -799,7 +799,7 @@ open class ClientProjectAPI {
      Remove a member associated with this project
      - DELETE /projects/{project}/members/{member}
      - This also sets their invite status to `REMOVED`. This endpoint requires the user to be a member of the project with the role `OWNER`.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter project: (path)  
@@ -853,7 +853,7 @@ open class ClientProjectAPI {
      Sets the Ory Network Project active in the Ory Network Console
      - PUT /console/active/project
      - Use this API to set your active project in the Ory Network Console UI.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter setActiveProjectInConsoleBody: (body)  (optional)
@@ -901,7 +901,7 @@ open class ClientProjectAPI {
      Update an Ory Network Project Configuration
      - PUT /projects/{project_id}
      - This endpoints allows you to update the Ory Network project configuration for individual services (identity, permission, ...). The configuration is fully compatible with the open source projects for the respective services (e.g. Ory Kratos for Identity, Ory Keto for Permissions).  This endpoint expects the `version` key to be set in the payload. If it is unset, it will try to import the config as if it is from the most recent version.  If you have an older version of a configuration, you should set the version key in the payload!  While this endpoint is able to process all configuration items related to features (e.g. password reset), it does not support operational configuration items (e.g. port, tracing, logging) otherwise available in the open source.  For configuration items that can not be translated to the Ory Network, this endpoint will return a list of warnings to help you understand which parts of your config could not be processed.  Be aware that updating any service's configuration will completely override your current configuration for that service!
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 
@@ -953,7 +953,7 @@ open class ClientProjectAPI {
     /**
      Update a B2B SSO Organization for a project.
      - PUT /projects/{project_id}/organizations/{organization_id}
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter projectId: (path) Project ID  The project&#39;s ID. 

@@ -35,7 +35,7 @@ open class ClientIdentityAPI {
      Create and deletes multiple identities
      - PATCH /admin/identities
      - Creates or delete multiple [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model). This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter patchIdentitiesBody: (body)  (optional)
@@ -82,7 +82,7 @@ open class ClientIdentityAPI {
      Create an Identity
      - POST /admin/identities
      - Create an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model).  This endpoint can also be used to [import credentials](https://www.ory.sh/docs/kratos/manage-identities/import-user-accounts-identities) for instance passwords, social sign in configurations or multifactor methods.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter createIdentityBody: (body)  (optional)
@@ -129,7 +129,7 @@ open class ClientIdentityAPI {
      Create a Recovery Code
      - POST /admin/recovery/code
      - This endpoint creates a recovery code which should be given to the user in order for them to recover (or activate) their account.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter createRecoveryCodeForIdentityBody: (body)  (optional)
@@ -176,7 +176,7 @@ open class ClientIdentityAPI {
      Create a Recovery Link
      - POST /admin/recovery/link
      - This endpoint creates a recovery link which should be given to the user in order for them to recover (or activate) their account.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter createRecoveryLinkForIdentityBody: (body)  (optional)
@@ -223,7 +223,7 @@ open class ClientIdentityAPI {
      Delete an Identity
      - DELETE /admin/identities/{id}
      - Calling this endpoint irrecoverably and permanently deletes the [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) given its ID. This action can not be undone. This endpoint returns 204 when the identity was deleted or when the identity was not found, in which case it is assumed that is has been deleted already.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID is the identity&#39;s ID. 
@@ -283,7 +283,7 @@ open class ClientIdentityAPI {
      Delete a credential for a specific identity
      - DELETE /admin/identities/{id}/credentials/{type}
      - Delete an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) credential by its type You can only delete second factor (aal2) credentials.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID is the identity&#39;s ID. 
@@ -337,7 +337,7 @@ open class ClientIdentityAPI {
      Delete & Invalidate an Identity's Sessions
      - DELETE /admin/identities/{id}/sessions
      - Calling this endpoint irrecoverably and permanently deletes and invalidates all sessions that belong to the given Identity.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID is the identity&#39;s ID. 
@@ -387,7 +387,7 @@ open class ClientIdentityAPI {
      Deactivate a Session
      - DELETE /admin/sessions/{id}
      - Calling this endpoint deactivates the specified session. Session data is not deleted.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID is the session&#39;s ID. 
@@ -437,7 +437,7 @@ open class ClientIdentityAPI {
      Extend a Session
      - PATCH /admin/sessions/{id}/extend
      - Calling this endpoint extends the given session ID. If `session.earliest_possible_extend` is set it will only extend the session after the specified time has passed.  Retrieve the session ID from the `/sessions/whoami` endpoint / `toSession` SDK method.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID is the session&#39;s ID. 
@@ -500,7 +500,7 @@ open class ClientIdentityAPI {
      Get an Identity
      - GET /admin/identities/{id}
      - Return an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model) by its ID. You can optionally include credentials (e.g. social sign in connections) in the response by using the `include_credential` query parameter.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID must be set to the ID of identity you want to get 
@@ -582,6 +582,7 @@ open class ClientIdentityAPI {
      * enum for parameter expand
      */
     public enum Expand_getSession: String, CaseIterable {
+        case identity = "identity"
     }
 
     /**
@@ -608,7 +609,7 @@ open class ClientIdentityAPI {
      Get Session
      - GET /admin/sessions/{id}
      - This endpoint is useful for:  Getting a session object with all specified expandables that exist in an administrative context.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID is the session&#39;s ID. 
@@ -677,7 +678,7 @@ open class ClientIdentityAPI {
      List Identities
      - GET /admin/identities
      - Lists all [identities](https://www.ory.sh/docs/kratos/concepts/identity-user-model) in the system.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter perPage: (query) Deprecated Items per Page  DEPRECATED: Please use &#x60;page_token&#x60; instead. This parameter will be removed in the future.  This is the number of items per page. (optional, default to 250)
@@ -800,7 +801,7 @@ open class ClientIdentityAPI {
      List an Identity's Sessions
      - GET /admin/identities/{id}/sessions
      - This endpoint returns all sessions that belong to the given Identity.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID is the identity&#39;s ID. 
@@ -843,6 +844,7 @@ open class ClientIdentityAPI {
      * enum for parameter expand
      */
     public enum Expand_listSessions: String, CaseIterable {
+        case identity = "identity"
     }
 
     /**
@@ -871,7 +873,7 @@ open class ClientIdentityAPI {
      List All Sessions
      - GET /admin/sessions
      - Listing all sessions that exist.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter pageSize: (query) Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination). (optional, default to 250)
@@ -928,7 +930,7 @@ open class ClientIdentityAPI {
      Patch an Identity
      - PATCH /admin/identities/{id}
      - Partially updates an [identity's](https://www.ory.sh/docs/kratos/concepts/identity-user-model) field using [JSON Patch](https://jsonpatch.com/). The fields `id`, `stateChangedAt` and `credentials` can not be updated using this method.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID must be set to the ID of identity you want to update 
@@ -980,7 +982,7 @@ open class ClientIdentityAPI {
      Update an Identity
      - PUT /admin/identities/{id}
      - This endpoint updates an [identity](https://www.ory.sh/docs/kratos/concepts/identity-user-model). The full identity payload (except credentials) is expected. It is possible to update the identity's credentials as well.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) ID must be set to the ID of identity you want to update 

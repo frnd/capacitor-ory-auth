@@ -34,7 +34,7 @@ open class ClientMetadataAPI {
      Return Running Software Version.
      - GET /version
      - This endpoint returns the version of Ory Kratos.  If the service supports TLS Edge Termination, this endpoint does not require the `X-Forwarded-Proto` header to be set.  Be aware that if you are running multiple nodes of this service, the version will never refer to the cluster state, only to a single instance.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - returns: RequestBuilder<GetVersion200Response> 
@@ -79,7 +79,7 @@ open class ClientMetadataAPI {
      Check HTTP Server Status
      - GET /health/alive
      - This endpoint returns a HTTP 200 status code when Ory Kratos is accepting incoming HTTP requests. This status does currently not include checks whether the database connection is working.  If the service supports TLS Edge Termination, this endpoint does not require the `X-Forwarded-Proto` header to be set.  Be aware that if you are running multiple nodes of this service, the health status will never refer to the cluster state, only to a single instance.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - returns: RequestBuilder<HealthStatus> 
@@ -124,7 +124,7 @@ open class ClientMetadataAPI {
      Check HTTP Server and Database Status
      - GET /health/ready
      - This endpoint returns a HTTP 200 status code when Ory Kratos is up running and the environment dependencies (e.g. the database) are responsive as well.  If the service supports TLS Edge Termination, this endpoint does not require the `X-Forwarded-Proto` header to be set.  Be aware that if you are running multiple nodes of Ory Kratos, the health status will never refer to the cluster state, only to a single instance.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - returns: RequestBuilder<IsReady200Response> 

@@ -35,7 +35,7 @@ open class ClientRelationshipAPI {
      Check the syntax of an OPL file
      - POST /opl/syntax/check
      - The OPL file is expected in the body of the request.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter body: (body)  (optional)
@@ -82,7 +82,7 @@ open class ClientRelationshipAPI {
      Create a Relationship
      - PUT /admin/relation-tuples
      - Use this endpoint to create a relationship.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter createRelationshipBody: (body)  (optional)
@@ -135,7 +135,7 @@ open class ClientRelationshipAPI {
      Delete Relationships
      - DELETE /admin/relation-tuples
      - Use this endpoint to delete relationships
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter namespace: (query) Namespace of the Relationship (optional)
@@ -205,7 +205,7 @@ open class ClientRelationshipAPI {
      Query relationships
      - GET /relation-tuples
      - Get all relationships that match the query. Only the namespace field is required.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter pageToken: (query)  (optional)
@@ -270,7 +270,7 @@ open class ClientRelationshipAPI {
      Query namespaces
      - GET /namespaces
      - Get all namespaces
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - returns: RequestBuilder<RelationshipNamespaces> 
@@ -316,7 +316,7 @@ open class ClientRelationshipAPI {
      Patch Multiple Relationships
      - PATCH /admin/relation-tuples
      - Use this endpoint to patch one or more relationships.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter relationshipPatch: (body)  (optional)

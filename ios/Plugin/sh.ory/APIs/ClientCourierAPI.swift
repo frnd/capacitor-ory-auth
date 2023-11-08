@@ -35,7 +35,7 @@ open class ClientCourierAPI {
      Get a Message
      - GET /admin/courier/messages/{id}
      - Gets a specific messages by the given ID.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter id: (path) MessageID is the ID of the message. 
@@ -88,7 +88,7 @@ open class ClientCourierAPI {
      List Messages
      - GET /admin/courier/messages
      - Lists all messages by given status and recipient.
-     - Bearer Token:
+     - BASIC:
        - type: http
        - name: oryAccessToken
      - parameter pageSize: (query) Items per Page  This is the number of items per page to return. For details on pagination please head over to the [pagination documentation](https://www.ory.sh/docs/ecosystem/api-design#pagination). (optional, default to 250)

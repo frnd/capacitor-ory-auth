@@ -1,7 +1,14 @@
 import {WebPlugin} from '@capacitor/core';
 
-import type {LogInOptions, OryAuthOptions, OryAuthPlugin, SignInOptions, VerifyOptions} from './definitions';
-import {FrontendApi, Configuration, UiNodeInputAttributes} from '@ory/kratos-client';
+import type {
+    LogInOptions, LoginResult,
+    OryAuthOptions,
+    OryAuthPlugin,
+    SignInOptions,
+    VerifyOptions,
+    VerifyResult
+} from './definitions';
+import {FrontendApi, Configuration, UiNodeInputAttributes, Session} from '@ory/kratos-client';
 import {SignInResult} from "./definitions";
 
 
@@ -9,7 +16,7 @@ let kratos: FrontendApi;
 
 export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
 
-    initialize(options: OryAuthOptions): void {
+    initialize(options: OryAuthOptions): Promise<void> {
         const {
             basePath,
             withCredentials = true,
@@ -25,9 +32,10 @@ export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
         });
 
         kratos = new FrontendApi(kratosConfiguration);
+        return Promise.resolve()
     }
 
-    async session(): Promise<unknown> {
+    async session(): Promise<Session> {
 
         if (!kratos) return Promise.reject("Initialize plugin before use.")
 
@@ -55,7 +63,8 @@ export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
 
             for (const cw of (registration.continue_with || [])) {
                 if(cw.action === 'show_verification_ui' && 'flow' in cw) return Promise.resolve({
-                    verificationFlowId: cw.flow.id
+                    ...registration,
+                    verificationFlowId: cw.flow.id,
                 })
             }
 
@@ -65,7 +74,7 @@ export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
         return Promise.reject("Error")
     }
 
-    async verify({id, code, email}: VerifyOptions): Promise<unknown> {
+    async verify({id, code, email}: VerifyOptions): Promise<VerifyResult> {
 
         if (!kratos) return Promise.reject("Initialize plugin before use.")
 
@@ -88,7 +97,7 @@ export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
         return Promise.reject("Error")
     }
 
-    async logIn({identifier, password}: LogInOptions): Promise<unknown> {
+    async logIn({identifier, password}: LogInOptions): Promise<LoginResult> {
 
         if (!kratos) return Promise.reject("Initialize plugin before use.")
 
@@ -111,7 +120,7 @@ export class OryAuthWeb extends WebPlugin implements OryAuthPlugin {
         return Promise.reject("Error")
     }
 
-    async logOut(): Promise<unknown> {
+    async logOut(): Promise<void> {
 
         if (!kratos) return Promise.reject("Initialize plugin before use.");
 

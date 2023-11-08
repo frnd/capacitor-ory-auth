@@ -6,18 +6,6 @@ import {OryAuth} from '@frnd/capacitor-ory-auth';
 const ORY_NETWORK = "https://unruffled-nash-i4elrqes45.projects.oryapis.com"
 const BASE_PATH = ORY_NETWORK
 
-function updateSessionInfo(element) {
-    OryAuth.session().then(async (session) => {
-        element.innerHTML = JSON.stringify(session, null, 2)
-
-        const whoami = await fetch(`${BASE_PATH}/sessions/whoami`)
-        console.log('capacitor-welcome.js: whoami = ', whoami)
-
-    }).catch(() => {
-        element.innerHTML = "No session"
-    }).finally(SplashScreen.hide)
-}
-
 window.customElements.define(
     'capacitor-welcome',
     class extends HTMLElement {
@@ -139,6 +127,15 @@ window.customElements.define(
         connectedCallback() {
             const self = this;
 
+            let sessionHTMLElement = self.shadowRoot.querySelector('#session-info')
+
+            function updateSessionInfo() {
+                OryAuth.session().then(async (session) => {
+                    sessionHTMLElement.innerHTML = JSON.stringify(session, null, 2)
+                }).catch(() => {
+                    sessionHTMLElement.innerHTML = "No session"
+                }).finally(SplashScreen.hide)
+            }
 
             let verificationFlowId;
 
@@ -173,7 +170,7 @@ window.customElements.define(
 
                         console.log('Validation result', result)
 
-                        updateSessionInfo(self.shadowRoot.querySelector('#session-info'))
+                        updateSessionInfo()
 
                     } catch (e) {
                         console.warn('User cancelled', e);
@@ -189,7 +186,7 @@ window.customElements.define(
 
                         await OryAuth.logIn({identifier: identifier, password:password})
 
-                        updateSessionInfo(self.shadowRoot.querySelector('#session-info'))
+                        updateSessionInfo()
 
                     } catch (e) {
                         console.warn('Login error', e);
@@ -209,9 +206,8 @@ window.customElements.define(
                     }
                 });
 
-            OryAuth.initialize({basePath: BASE_PATH, timeout: 10000})
+            OryAuth.initialize({basePath: BASE_PATH, timeout: 10000}).then(updateSessionInfo)
 
-            updateSessionInfo(self.shadowRoot.querySelector('#session-info'))
         }
     }
 );

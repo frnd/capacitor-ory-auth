@@ -29,12 +29,14 @@ npx cap sync
 ### initialize(...)
 
 ```typescript
-initialize(options?: OryAuthOptions | undefined) => void
+initialize(options?: OryAuthOptions | undefined) => Promise<unknown>
 ```
 
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code><a href="#oryauthoptions">OryAuthOptions</a></code> |
+
+**Returns:** <code>Promise&lt;unknown&gt;</code>
 
 --------------------
 
